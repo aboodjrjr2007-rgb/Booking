@@ -2,21 +2,20 @@
 import { Router } from "express";
 import mongoose from "mongoose";
 import bookingController from "../controller/bookingController.js"
-// const app = express();
 
-// app.use(express.json());
+
 
 const router = Router();
 
  router.post("/createBooking",bookingController.createBooking)
 
 
-router.get("/listBooking/:userid", bookingController.listBooking);
+router.get("/listBooking", bookingController.listBooking);
 
-router.get("/bookingDetails/:bookingid", bookingController.bookingDetails );
+router.get("/bookingDetails", bookingController.getBookingDetailsById );
 
-router.patch("/updateBooking/:bookingid", bookingController.updateBooking);
+router.patch("/updateBooking", bookingController.updateBookingById);
 
-router.delete("/deleteBooking/:bookingid", bookingController.deleteBooking);
+router.delete("/deleteBooking", bookingController.deleteBookingById);
 
 export default router;

@@ -1,14 +1,16 @@
 import express from "express";
 import userController from "../controller/userController.js"
 
-const app = express()
-
-app.use(express.json())
+import valdation from "../Middleware/ValdationMiddleware.js";
 
 const router = express.Router();
 
-router.post("/newUser",userController.newUser)
+router.post("/register",valdation,userController.register)
 
-router.get("/findUserByUserId/:userid",userController.findUserByUserId )
+router.get("/login",valdation,userController.login )
+
+router.patch("/updateProfile" , valdation , userController.updateProfile)
+
+router.delete("/deleteProfile" , valdation , userController.deleteProfile)
 
 export default router

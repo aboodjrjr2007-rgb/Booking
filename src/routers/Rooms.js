@@ -1,19 +1,27 @@
 import express from "express";
-import roomsController from "../controller/roomsController.js"
+import roomController from "../controller/roomsController.js";
 
 
 const router = express.Router();   
    
 
-router.post("/newRoom", roomsController.newRoom )
+router.post("/newRoom", roomController.createNewRoom )
 
-router.get("/getAllRooms", roomsController.getAllRooms)
+router.get("/getAllRooms", roomController.getAllRooms)
 
-router.get("/findRoomByRoomid/:roomid", roomsController.findRoomByRoomid)
+router.get("/findRoomByRoomid", roomController.getRoomById)
 
-router.patch("/updateRoom/:roomid", roomsController.updateRoom);
+router.patch("/updateRoom", roomController.deleteRoomById);
 
-router.delete("/deleteRoom/:roomid", roomsController.deleteRoom);
+router.delete("/deleteRoom", roomController.deleteRoomById);
+
+router.delete("/deleteAllRooms",roomController.deleteRooms)
+
+router.get("/getTheBookingRooms",roomController.getTheBookingRooms)
+
+router.get("/getTheBookedRoomById",roomController.getTheBookedRoomById)
+
+
 
 
 export default router
