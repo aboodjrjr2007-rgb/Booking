@@ -11,6 +11,6 @@ router.get("/login",userController.login)
 
 router.patch("/updateProfile"  , userController.updateProfile)
 
-router.delete("/deleteProfile" , valdation , userController.deleteProfile)
+router.delete("/deleteProfile" , userController.deleteProfile)
 
 export default router

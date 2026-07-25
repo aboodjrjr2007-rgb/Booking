@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 import { Schema } from "mongoose";
 import { required } from "zod/mini";
 
-const en = ({
+export const en = ({
   SUPER_ADMIN: 'Super Admin',
   ADMIN: 'Admin'
 });
 
-const Admin = new Schema ({
+const adminSchema = new Schema ({
     firstName: {
         type : String,
         required : true,
@@ -43,7 +43,7 @@ const Admin = new Schema ({
     }
 })
 
-const admin = mongoose.model("admin" , Admin)
+const Admin = mongoose.model("admin" , adminSchema)
 
-export default admin
+export default Admin
 

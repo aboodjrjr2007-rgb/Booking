@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Schema } from "mongoose";
-const newRoom = new Schema({
+const roomSchema = new Schema({
   adminId :{
     type : Schema.Types.ObjectId,
     ref : 'Admin',
@@ -28,5 +28,5 @@ const newRoom = new Schema({
 })
 
 
-const Rooms = mongoose.model("rooms", newRoom);
-export default Rooms;
+const Room = mongoose.model("rooms", roomSchema);
+export default Room;

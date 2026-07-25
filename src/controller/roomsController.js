@@ -59,9 +59,6 @@ const futuerBookingExist = await Booking.findById(
    }
   }
     const deleteAllRooms = await Room.deleteMany()
-    if(!deleteAllRooms){
-      return res.status(404).send("No room to delete")
-    }
     res.status(200).send("All rooms deleted")
   }
 

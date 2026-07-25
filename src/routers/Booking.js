@@ -5,17 +5,17 @@ import bookingController from "../controller/bookingController.js"
 
 import { authForUser } from "../Middleware/authMiddleware.js";
 
-const router = Router();
+const Bookingrouter = Router();
 
- router.post("/createBooking",authForUser,bookingController.createBooking)
+ Bookingrouter.post("/createBooking",authForUser,bookingController.createBooking)
 
 
-router.get("/listBooking", bookingController.listBooking);
+Bookingrouter.get("/listBooking", bookingController.listBooking);
 
-router.get("/bookingDetails", bookingController.getBookingDetailsById );
+Bookingrouter.get("/bookingDetails", bookingController.getBookingDetailsById );
 
-router.patch("/updateBooking", bookingController.updateBookingById);
+Bookingrouter.patch("/updateBooking", bookingController.updateBookingById);
 
-router.delete("/deleteBooking", bookingController.deleteBookingById);
+Bookingrouter.delete("/deleteBooking", bookingController.deleteBookingById);
 
-export default router;
+export default Bookingrouter;

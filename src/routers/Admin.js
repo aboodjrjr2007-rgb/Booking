@@ -7,12 +7,20 @@ import valdation from "../Middleware/ValdationMiddleware.js";
 import { authForAdmin } from "../Middleware/authMiddleware.js";
 
 
-const router = Router()
+const Adminrouter = Router()
 
-router.post("/register" , valdation,adminController.register)
+Adminrouter.post("/register" , valdation,adminController.register)
 
-router.post("/login" ,adminController.login)
+Adminrouter.post("/login" ,adminController.login)
 
-router.patch("/updateProfile" ,adminController.updateProfile)
+Adminrouter.patch("/updateProfile" ,adminController.updateProfile)
 
-export default router
+Adminrouter.get("/getAllAdmins" , adminController.getAllAdmins)
+
+Adminrouter.get("/getAdminById" , adminController.getAdminById)
+
+Adminrouter.delete("/deleteAlladmins" , adminController.deleteAlladmins)
+
+Adminrouter.delete("/deleteAdminById" , adminController.deleteAdminById)
+
+export default Adminrouter

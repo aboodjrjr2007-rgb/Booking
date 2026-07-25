@@ -2,26 +2,26 @@ import express from "express";
 import roomController from "../controller/roomsController.js";
 import {authForAdmin}  from "../Middleware/authMiddleware.js";
 
-const router = express.Router();   
+const Roomrouter = express.Router();   
    
 
-router.post("/newRoom", authForAdmin,roomController.createNewRoom )
+Roomrouter.post("/newRoom", authForAdmin,roomController.createNewRoom )
 
-router.get("/getAllRooms", authForAdmin,roomController.getAllRooms)
+Roomrouter.get("/getAllRooms", authForAdmin,roomController.getAllRooms)
 
-router.get("/findRoomById", roomController.getRoomById)
+Roomrouter.get("/findRoomById", roomController.getRoomById)
 
-router.patch("/updateRoom", roomController.updateRoomById);
+Roomrouter.patch("/updateRoom", roomController.updateRoomById);
 
-router.delete("/deleteRoom", roomController.deleteRoomById);
+Roomrouter.delete("/deleteRoom", roomController.deleteRoomById);
 
-router.delete("/deleteAllRooms",roomController.deleteRooms)
+Roomrouter.delete("/deleteAllRooms",roomController.deleteRooms)
 
-router.get("/getTheBookingRooms",roomController.getTheBookingRooms)
+Roomrouter.get("/getTheBookingRooms",roomController.getTheBookingRooms)
 
-router.get("/getTheBookedRoomById",roomController.getTheBookedRoomById)
-
-
+Roomrouter.get("/getTheBookedRoomById",roomController.getTheBookedRoomById)
 
 
-export default router
+
+
+export default Roomrouter
