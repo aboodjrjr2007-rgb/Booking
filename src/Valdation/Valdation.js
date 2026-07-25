@@ -7,7 +7,7 @@ const Valdtaion = z.object({
     password : z.string().min(8).max(128).regex(/[A-Z]/)
     .regex(/[0-9]/)
     .regex(/[!@#$%^&*()=_|~/-]/),
-    phoneNumber : z.string().max(10).optional(),
+    phoneNumber : z.string().max(15).regex(/[0-9]/).regex(/[+]/).optional(),
 
 })
 

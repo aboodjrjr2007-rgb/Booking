@@ -99,13 +99,16 @@ class BookingController {
   };
 
   updateBookingById = async (req, res) => {
-    const { bookingId } = req.body;
+    const { bookingId ,startTime,endTime} = req.body;
     if (!bookingId) {
       return res.status(400).send("Enter the right Carditans");
     }
     const updateBooking = await Booking.findByIdAndUpdate(bookingId, req.body);
     if (!updateBooking) {
       return res.status(404).send("No booking found to update");
+    }
+    if(startTime>=endTime){
+      return res.status(400).send("U can't update because you make start start greater then or equal end time")
     }
     res.status(200).send("The book update successfully!");
   };

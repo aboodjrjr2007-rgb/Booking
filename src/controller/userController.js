@@ -60,7 +60,7 @@ login = async (req, res) => {
       }
     )
     if(!update){
-        return res.status(400).send("no user founded to update")
+        return res.status(400).send("No user found to update")
     }
     res.status(200).send("Updated Successfully!")
 
