@@ -5,19 +5,20 @@ import mongoose from "mongoose";
 
 class BookingController {
   createBooking = async (req,res) =>{
-    const userId = req.user.id
-   const {roomId , startTime , endTime } = req.body
+    const userId = req.user?.id
+    const {roomId} = req.body
+   const  { startTime , endTime } = req.body
     if ( !userId && !roomId  && !startTime && !endTime) {
        return res.status(400).send({ error: "Missing requried filed" });
      }
-     const user = await User.findById(req.body.userid);
+     const user = await User.findById(userId);
      if (!user) {
        return res
          .status(404)
          .send({ error: "Booking failed. The specified User ID does not exist." });
      }
   
-     const room = await Rooms.findById(req.body.roomid);
+     const room = await Rooms.findById(roomId);
      if (!room) {
        return res
          .status(404)
@@ -31,10 +32,10 @@ class BookingController {
        return res.status(404).send({ error: "invalid input" });
      }
   
-     if (!room.isActive) {
+     if (!room.active) {
        return res.status(404).send({ error: "the room in not active for now" });
      }
-      if (req.body.startTime >= req.body.endTime) {
+      if (startTime >= endTime) {
        return res
          .status(409)
          .send({ error:
@@ -59,10 +60,16 @@ class BookingController {
              "u can't book beacuse there is already room already booked in this time ",
          });
      }
-   
+     const roomInfo = await Rooms.findById(roomId)
      const newBooking = await Booking.create({
       userId : userId,
       roomId : roomId,
+      roomDetails :{
+        roomName : roomInfo.roomName,
+        roomId : roomInfo.roomId,
+        capcity : roomInfo.capcity,
+        location: roomInfo.location
+      },
       startTime : startTime,
       endTime : endTime
      });
@@ -83,7 +90,7 @@ class BookingController {
 
 
  getBookingDetailsById = async (req,res) => {
-  const bookingId = req.params
+  const {bookingId} = req.body
   if(!bookingId){
     return res.status(400).send("Enter the right Carditans")
    }
@@ -95,7 +102,7 @@ class BookingController {
 }
 
  updateBookingById = async (req,res) => {
-  const bookingId = req.params
+  const {bookingId} = req.body
     if(!bookingId){
     return res.status(400).send("Enter the right Carditans")
    }
@@ -108,7 +115,7 @@ class BookingController {
 }
 
  deleteBookingById = async (req,res) => {
-     const bookingId = req.params
+     const {bookingId} = req.body
       if(!bookingId){
     return res.status(400).send("Enter the right Carditans")
    }

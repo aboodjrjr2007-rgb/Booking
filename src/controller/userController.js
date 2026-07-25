@@ -1,5 +1,7 @@
 import User from "../models/user.js";
-
+ import bcrypt, { hash } from "bcrypt";
+ import jwt from "jsonwebtoken"
+ import { generateTokens } from "../Middleware/authMiddleware.js";
 class UserController {
     register = async (req,res) => {
 const { firstName, lastName, email, password  } =
@@ -11,7 +13,15 @@ const { firstName, lastName, email, password  } =
     if (existUser) {
       return res.status(404).send("This email already used");
     }
-    req.status(200).send("You register Successfully!")
+    const hashPsw = await bcrypt.hash(password,12)
+    const user = await User.create({
+      firstName : firstName.toLowerCase(),
+      lastName : lastName.toLowerCase(),
+      email : email.toLowerCase(),
+      password : hashPsw
+    })
+    user.save()
+    res.status(200).send("You register Successfully!")
 }
 login = async (req, res) => {
     const {email, password } =
@@ -19,15 +29,14 @@ login = async (req, res) => {
     if (!email && !password) {
       return res.status(404).send("Enter the right Carditans");
     }
-    const existAdmin = await User.findOne({
+    const existUser = await User.findOne({
       email: email.toLowerCase(),
-      password,
     });
-    if (!existAdmin) {
+    if (!existUser) {
       return res.status(404).send("Your email or password is wrong");
     }
     
-    const Paylod = { id: User.id, email: User.email, psw: User.password };
+    const Paylod = { id: existUser.id, email: existUser.email, psw: existUser.password };
 
     const accessToken = generateTokens(Paylod);
     const refreshToken = jwt.sign(Paylod, process.env.REFRESH_TOKEN_SECRET);
@@ -39,12 +48,21 @@ login = async (req, res) => {
   };
 
   updateProfile = async (req,res) =>{
-    const id = req.params
-    const update = await User.findByIdAndUpdate(id,req.body)
+    
+    const {firstName , lastName , password , email} = req.body
+    const hashPsw = await bcrypt.hash(password,12)
+    const update = await User.findOneAndUpdate({email : email.toLowerCase()},
+      {
+        emaill : email.toLowerCase(),
+        password : hashPsw,
+        firstName : firstName,
+        lastName : lastName
+      }
+    )
     if(!update){
         return res.status(400).send("no user founded to update")
     }
-    req.status(200).send("Updated Successfully!")
+    res.status(200).send("Updated Successfully!")
 
 }
 

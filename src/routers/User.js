@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.post("/register",valdation,userController.register)
 
-router.get("/login",valdation,userController.login )
+router.get("/login",userController.login)
 
-router.patch("/updateProfile" , valdation , userController.updateProfile)
+router.patch("/updateProfile"  , userController.updateProfile)
 
 router.delete("/deleteProfile" , valdation , userController.deleteProfile)
 

@@ -1,18 +1,21 @@
 import mongoose, { model } from "mongoose";
 import { Schema } from "mongoose";
 const newBooking = new Schema({
-   bookingid : Number,
-   userid :{
+   userId :{
    type: Schema.Types.ObjectId,
-    ref : "userController",
-    required: true
-    
+    ref : "User",
+    unique : true
    },
-   roomid :{
-  type: Schema.Types.ObjectId,
-   ref : "roomsController",
-    required: true,
-    available: true
+   roomId :{
+  type : Schema.Types.ObjectId,
+  ref : "Room",
+  unique : true
+   },
+   roomDetails : {
+    roomName : String,
+    roomId : String,
+    capcity : Number,
+    location : String
    },
 
     startTime: {

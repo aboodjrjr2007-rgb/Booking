@@ -1,5 +1,5 @@
 
-import Valdtaion from "../Valdation/Valdation.js";
+import Valdation from "../Valdation/Valdation.js";
 
 const valdation = async (req,res,next) => {
     const result = await Valdation.safeParse(req.body)

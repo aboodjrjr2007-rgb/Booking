@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-import bcrypt from "bcrypt";
+import bcrypt, { hash } from "bcrypt";
 
 import Admin from "../models/admin.js";
 
@@ -12,14 +12,10 @@ import Booking from "../models/booking.js";
 
 class AdminController {
   register = async (req, res) => {
-    const { firstName, lastName, email, password, role, isSuperAdmin } =
+    const { firstName, lastName, email, password, role, isSuperAdmin,phoneNumber } =
       req.body;
     if (!firstName && !lastName && !email && !password) {
      return res.status(400).send("Enter the right Carditans");
-    }
-    const existAdmin = await Admin.findOne({ email: email.toLowerCase() });
-    if (existAdmin) {
-      return res.status(404).send("This email already used");
     }
     const hashPsw = await bcrypt.hash(password, 12);
     const newAdmin = await Admin.create({
@@ -27,27 +23,21 @@ class AdminController {
       lastName: lastName.toLowerCase(),
       email: email.toLowerCase(),
       password: hashPsw,
-      phoneNumber,
+      phoneNumber : phoneNumber,
       role: role,
       isSuperAdmin: isSuperAdmin,
     });
     await newAdmin.save();
-    req.status(200).send("New admin created");
+    res.status(200).send("New admin created");
   };
 
   login = async (req, res) => {
-    const { firstName, lastName, email, password, isSuperAdmin, role } =
+    const { firstName, lastName, email, password, isSuperAdmin, role , phoneNumber} =
       req.body;
     if (!email && !password) {
       return res.status(404).send("Enter the right Carditans");
     }
-    const existAdmin = await Admin.findOne({
-      email: email.toLowerCase(),
-      password,
-    });
-    if (!existAdmin) {
-      return res.status(404).send("Your email or password is wrong");
-    }
+   
     const count = await Admin.countDocuments();
     if (count === 0) {
       const hashPsw = await bcrypt.hash(password, 12);
@@ -56,14 +46,20 @@ class AdminController {
         lastName: lastName.toLowerCase(),
         email: email.toLowerCase(),
         password: hashPsw,
-        role: en.SUPER_ADMIN,
+        role: "Super Admin",
         isSuperAdmin: true,
         phoneNumber: phoneNumber,
       });
       newAdmin.save();
       return res.status(200).send("No admin found , First admin created");
     }
-    const Paylod = { id: Admin.id, email: Admin.email, psw: Admin.password };
+     const existAdmin = await Admin.findOne({
+      email: email.toLowerCase()
+    });
+    if (!existAdmin) {
+      return res.status(404).send("Your email or password is wrong");
+    }
+    const Paylod = { id: existAdmin._id, email: existAdmin.email, psw: existAdmin.password };
 
     const accessToken = generateTokens(Paylod);
     const refreshToken = jwt.sign(Paylod, process.env.REFRESH_TOKEN_SECRET);
@@ -75,15 +71,20 @@ class AdminController {
   };
 
   updateProfile = async (req,res) =>{
-    const id = req.params
-    const update = await Admin.findByIdAndUpdate(id,req.body)
-    if(!update){
-        return res.status(400).send("no user founded to update")
+    const id = req.body.id
+   
+    const { firstName , lastName, email, password } = req.body;
+    const hashPsw = await bcrypt.hash(password,12)
+    const update = await Admin.findByIdAndUpdate(
+      id,
+      { firstName , lastName, email, password : hashPsw},
+    );
+    if (!update) {
+      return res.status(404).send({ message: "No profile to update" });
     }
-    req.status(200).send("Updated Successfully!")
+    res.status(200).send("Updated Successflly !");
 
 }
-
 }
 const adminController = new AdminController()
 

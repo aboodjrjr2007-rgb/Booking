@@ -3,11 +3,11 @@ import { Router } from "express";
 import mongoose from "mongoose";
 import bookingController from "../controller/bookingController.js"
 
-
+import { authForUser } from "../Middleware/authMiddleware.js";
 
 const router = Router();
 
- router.post("/createBooking",bookingController.createBooking)
+ router.post("/createBooking",authForUser,bookingController.createBooking)
 
 
 router.get("/listBooking", bookingController.listBooking);

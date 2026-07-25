@@ -1,11 +1,12 @@
 import Room from "../models/room.js";
 import Booking from "../models/booking.js";
+import Admin from "../models/admin.js";
 
 class RoomController {
 createNewRoom = async (req,res) => {
-    const adminId = req.params
     const {roomName , roomId , capcity , location} = req.body
-    if(!roomName){
+      const adminId = req.admin?.id;
+    if(!roomName && !roomId && !capcity && !location){
          return res.status(404).send("Enter the right Carditans");
     }
     const existRoom = await Room.findOne({roomName : roomName})
@@ -13,13 +14,14 @@ createNewRoom = async (req,res) => {
         return res.status(400).send("The room already exist")
     }
     const newRoom = await Room.create({
-        adminId : adminId,
-        roomName : roomName,
-        roomId : roomId,
+        adminId:adminId,
+        roomName:roomName,
+        roomId :roomId,
+        capcity : capcity,
         location : location
     })
     newRoom.save()
-    req.status(200).send("Room created")
+    res.status(200).send("Room created")
   }
 
   getAllRooms = async (req, res) => {
@@ -34,15 +36,15 @@ createNewRoom = async (req,res) => {
 
   
   getRoomById = async (req,res) => {
-      const roomId = req.params
+      const {roomId} = req.body
       if(!roomId){
            return res.status(400).send("Enter the right Carditans")
       }
        const getRoomByid = await Room.findById(roomId)
       if(!getRoomByid) {
-          res.status(404).send("No room founded")
+          return res.status(404).send("No room founded")
       }
-      req.status(200).send({room : getRoomByid})
+      res.status(200).send({room : getRoomByid})
 }
 deleteRooms = async (req,res) =>{
   const rooms = await Room.find()
@@ -84,7 +86,7 @@ const futuerBookingExist = await Booking.findById(
 
     updateRoomById = async (req,res) => {
         const {roomName} = req.body
-        const roomId = req.params
+        const {roomId} = req.body
          if(!roomId){
           return res.status(400).send("Enter the right Carditans")
         }
@@ -106,11 +108,12 @@ const futuerBookingExist = await Booking.findById(
           res.status(200).send({Bookedroom  :findBooking})
          }
          getTheBookedRoomById = async(req,res) => {
-          const bookedId = req.params
-           if(!bookedId){
+          const {roomId} = req.body
+          console.log(roomId)
+           if(!roomId){
             return res.status(400).send("Enter the right Carditans")
           }
-          const findRoom = await Booking.findById(bookedId)
+          const findRoom = await Booking.findOne({roomId:roomId})
           if(!findRoom){
             return res.status(404).send("this room is not booked")
           }

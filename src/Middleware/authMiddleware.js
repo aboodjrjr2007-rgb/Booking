@@ -16,13 +16,16 @@ const generateTokens = (Paylod) => {
 const authForAdmin = async (req,res,next) =>{
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
-    if(token === null){
-        return res.sendStatus(401)
-    }
-    const decode = await jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
-    req.admin = await Admin.findById(decode.id)
+     if(token == null) return res.sendStatus(401)
 
-    next()
+        const decoded = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+        const admin = await Admin.findById(decoded.id)
+        console.log(admin)
+        if(!admin) {
+            console.log("admin not found")
+        }
+        req.admin = admin
+             next()
 }
 
 const authForUser = async (req,res,next) =>{
@@ -31,10 +34,14 @@ const authForUser = async (req,res,next) =>{
     if(token === null){
         return res.sendStatus(401)
     }
-    const decode = await jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
-    req.user = await User.findById(decode.id)
-
-    next()
+    const decoded = await jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+    const user = await User.findById(decoded.id)
+        console.log(user)
+        if(!user) {
+            console.log("user not found")
+        }
+        req.user = user
+             next()
 }
 
 

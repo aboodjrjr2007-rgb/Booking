@@ -25,6 +25,10 @@ mongoose
     console.error(err);
   });
 
+  import adminRouter from "./routers/Admin.js"
+
+  app.use("/admin", adminRouter)
+
 import userRouter from "./routers/User.js";
 
 app.use("/user", userRouter)

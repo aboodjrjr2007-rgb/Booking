@@ -1,16 +1,18 @@
 import express from "express";
 
 import { Router } from "express";
-import adminController from "../controller/adminController";
+import adminController from "../controller/adminController.js";
 
-import valdation from "../Middleware/ValdationMiddleware";
+import valdation from "../Middleware/ValdationMiddleware.js";
+import { authForAdmin } from "../Middleware/authMiddleware.js";
+
 
 const router = Router()
 
 router.post("/register" , valdation,adminController.register)
 
-router.post("/register" , valdation,adminController.login)
+router.post("/login" ,adminController.login)
 
-router.patch("/updateProfile" , valdation,adminController.updateProfile)
+router.patch("/updateProfile" ,adminController.updateProfile)
 
 export default router
